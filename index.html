@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schweinerei & Gemeinerei – Digitaler Kartenstapel</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(to bottom, #c0f0b0, #a0d4f0); /* grün zu blau */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px 0;
+    position: relative;
+  }
+
+  h1 {
+    margin: 0 0 20px 0;
+    color: #1b5e20; /* dunkles grün */
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px #80c0ff; /* leichtes blau als Schatten */
+  }
+
+  .card-container {
+    perspective: 1000px;
+    width: 90%;
+    max-width: 450px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 25px;
+    background: linear-gradient(to bottom, #b2f2b2, #80d4ff); /* grün zu blau */
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+  }
+
+  .category {
+    margin: 12px 0;
+    padding: 12px;
+    background: #80d4ff; /* hellblau */
+    border-radius: 12px;
+    font-weight: bold;
+    color: #1b5e20; /* dunkles grün */
+  }
+
+  .button-container {
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 12px;
+    background: #1b5e20; /* dunkles grün */
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 5px;
+  }
+
+  button:hover {
+    background: #145214; /* dunkleres grün beim hover */
+  }
+
+  .credits {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.9rem;
+    color: #1b5e20;
+  }
+
+  /* Responsive Anpassungen */
+  @media (max-width: 600px) {
+    .card { font-size: 1rem; padding: 20px; }
+    h1 { font-size: 1.6rem; }
+  }
+
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .card { font-size: 1.1rem; padding: 22px; }
+    h1 { font-size: 1.8rem; }
+  }
+
+  @media (min-width: 1025px) {
+    .card { font-size: 1.2rem; padding: 25px; }
+    h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Schweinerei & Gemeinerei – 18+ Edition</h1>
+
+<div class="card-container">
+  <div class="card" id="card">
+    <div class="category" id="cat1">Lädt...</div>
+    <div class="category" id="cat2">Lädt...</div>
+    <div class="category" id="cat3">Lädt...</div>
+    <div class="category" id="cat4">Lädt...</div>
+  </div>
+  <div class="button-container">
+    <button onclick="nextCard()">Nächste Karte</button>
+  </div>
+</div>
+
+<div class="credits">by Mael K.</div>
+
+<script>
+const cards = [
+  ["Das macht man nur nackt", "Beleidigung für den Ex", "Etwas, das stinkt", "Lustiger Spitzname für einen Hund"],
+  ["Gemeinster Kommentar zu Haaren", "Etwas, das man leckt", "Unnötigste Erfindung", "Das schreit nach Ärger"],
+  ["Peinlicher Fund im Schlafzimmer", "Beleidigung im Straßenverkehr", "Etwas, das quietscht", "Lustiger Name für ein Getränk"],
+  ["Romantisches Date zu zweit", "Unangenehmste Mitbewohnerin", "Schmutziges Geheimnis", "Dummster Spruch beim Flirten"],
+  ["Was man heimlich macht", "Beleidigung für Chef", "Peinlichstes Outfit", "Etwas, das man nicht essen sollte"],
+  ["Gemeinester Scherz im Büro", "Sexy Tanzmove", "Lustiger Spitzname für die Schwiegermutter", "Etwas, das quietscht"],
+  ["Das macht man am Strand", "Beleidigung für Nachbarn", "Peinlichster Song im Radio", "Etwas, das riecht"],
+  ["Verbotene Lust", "Dumme Ausrede", "Etwas, das man küsst", "Witziger Name für ein Haustier"],
+  ["Unangenehmster Moment auf der Arbeit", "Lustiger Streich", "Etwas, das klebt", "Gemeinste Bemerkung zu Hobbys"],
+  ["Romantisches Geschenk", "Dummster Streitgrund", "Peinlichster Film", "Etwas, das man heimlich isst"],
+  ["Das macht man zu zweit und ist romantisch", "Ungewöhnlichste Eissorte", "Peinlichster Moment im Urlaub", "Etwas, das quietscht"],
+  ["Gemeinster Scherz beim Sport", "Lustiger Name für einen Kollegen", "Beleidigung für den Nachbarn", "Etwas, das man heimlich stiehlt"],
+  ["Peinlichster Moment auf einer Party", "Schrägster Tanzmove", "Etwas, das unangenehm riecht", "Witziger Spitzname für Haustiere"],
+  ["Romantische Überraschung", "Dummster Streitpunkt", "Etwas, das man heimlich nascht", "Peinlichster Filmabend"],
+  ["Unangenehmster Moment im Büro", "Lustiger Kommentar beim Flirten", "Gemeinste Bemerkung zu Kleidung", "Etwas, das klebt"],
+  ["Romantisches Geschenk, das schiefgeht", "Peinlichste SMS", "Etwas, das man heimlich isst", "Witziger Name für einen Freund"],
+  ["Das macht man nachts heimlich", "Beleidigung für Schwiegereltern", "Peinlicher Songtext", "Etwas, das quietscht"],
+  ["Unangenehmster Moment auf Reisen", "Lustiger Streich im Büro", "Etwas, das klebt", "Gemeinster Kommentar zum Hobby"],
+  ["Romantisches Date, das schiefgeht", "Dummster Streitgrund", "Peinlichster Filmabend", "Etwas, das heimlich gegessen wird"],
+  ["Gemeinster Kommentar beim Essen", "Sexy Tanzmove", "Lustiger Spitzname für Schwiegereltern", "Etwas, das riecht"],
+  ["Das macht man am Strand heimlich", "Beleidigung für Nachbarn", "Peinlichster Song", "Etwas, das quietscht"],
+  ["Verbotene Fantasie", "Dumme Ausrede", "Etwas, das man küsst", "Witziger Name für Haustiere"],
+  ["Unangenehmster Moment bei der Arbeit", "Lustiger Streich", "Etwas, das klebt", "Gemeinste Bemerkung zu Hobbys"],
+  ["Romantisches Geschenk, das schiefgeht", "Dummster Streit", "Peinlichster Film", "Etwas, das heimlich gegessen wird"],
+  ["Das macht man nur zu zweit", "Lustiger Spitzname für den Kollegen", "Etwas, das stinkt", "Peinlicher Fund"],
+  ["Gemeinster Scherz beim Sport", "Beleidigung für Chef", "Peinlichster Moment", "Etwas, das quietscht"],
+  ["Romantisches Date", "Dummster Spruch beim Flirten", "Peinliches Outfit", "Etwas, das man heimlich isst"],
+  ["Peinlichster Moment im Urlaub", "Lustiger Spitzname für Haustiere", "Etwas, das klebt", "Gemeinste Bemerkung"],
+  ["Sexy Tanzmove", "Beleidigung für Nachbarn", "Etwas, das riecht", "Witziger Name für ein Getränk"],
+  ["Unangenehmster Moment auf der Arbeit", "Lustiger Streich", "Etwas, das quietscht", "Gemeinster Kommentar"],
+  ["Romantisches Geschenk", "Dummster Streitgrund", "Peinlichster Film", "Etwas, das heimlich gegessen wird"],
+  ["Das macht man nur nackt", "Beleidigung für den Ex", "Etwas, das stinkt", "Lustiger Spitzname für den Hund"],
+  ["Gemeinster Kommentar zu Haaren", "Etwas, das man leckt", "Unnötigste Erfindung", "Das schreit nach Ärger"],
+  ["Peinlicher Fund im Schlafzimmer", "Beleidigung im Straßenverkehr", "Etwas, das quietscht", "Lustiger Name für ein Getränk"],
+  ["Romantisches Date zu zweit", "Unangenehmste Mitbewohnerin", "Schmutziges Geheimnis", "Dummster Spruch beim Flirten"],
+  ["Was man heimlich macht", "Beleidigung für Chef", "Peinlichstes Outfit", "Etwas, das man nicht essen sollte"],
+  ["Gemeinester Scherz im Büro", "Sexy Tanzmove", "Lustiger Spitzname für die Schwiegermutter", "Etwas, das quietscht"],
+  ["Das macht man am Strand", "Beleidigung für Nachbarn", "Peinlichster Song im Radio", "Etwas, das riecht"],
+  ["Verbotene Lust", "Dumme Ausrede", "Etwas, das man küsst", "Witziger Name für ein Haustier"],
+  ["Unangenehmster Moment auf der Arbeit", "Lustiger Streich", "Etwas, das klebt", "Gemeinste Bemerkung zu Hobbys"],
+  ["Romantisches Geschenk", "Dummster Streitgrund", "Peinlichster Film", "Etwas, das man heimlich isst"],
+  ["Das macht man zu zweit und ist romantisch", "Ungewöhnlichste Eissorte", "Peinlichster Moment im Urlaub", "Etwas, das quietscht"],
+  ["Gemeinster Scherz beim Sport", "Lustiger Name für einen Kollegen", "Beleidigung für den Nachbarn", "Etwas, das man heimlich stiehlt"],
+  ["Peinlichster Moment auf einer Party", "Schrägster Tanzmove", "Etwas, das unangenehm riecht", "Witziger Spitzname für Haustiere"],
+  ["Romantische Überraschung", "Dummster Streitpunkt", "Etwas, das man heimlich nascht", "Peinlichster Filmabend"],
+  ["Unangenehmster Moment im Büro", "Lustiger Kommentar beim Flirten", "Gemeinste Bemerkung zu Kleidung", "Etwas, das klebt"],
+  ["Romantisches Geschenk, das schiefgeht", "Peinlichste SMS", "Etwas, das man heimlich isst", "Witziger Name für einen Freund"],
+  ["Das macht man nachts heimlich", "Beleidigung für Schwiegereltern", "Peinlicher Songtext", "Etwas, das quietscht"],
+  ["Unangenehmster Moment auf Reisen", "Lustiger Streich im Büro", "Etwas, das klebt", "Gemeinster Kommentar zum Hobby"]
+];
+
+
+
+
+let lastCard = -1;
+
+function getRandomCard() {
+  let index;
+  do {
+    index = Math.floor(Math.random() * cards.length);
+  } while (index === lastCard);
+  lastCard = index;
+  return cards[index];
+}
+
+function showCard(card) {
+  document.getElementById("cat1").innerText = card[0];
+  document.getElementById("cat2").innerText = card[1];
+  document.getElementById("cat3").innerText = card[2];
+  document.getElementById("cat4").innerText = card[3];
+}
+
+function nextCard() {
+  const card = getRandomCard();
+  showCard(card);
+}
+
+// Zeige die erste Karte beim Laden
+nextCard();
+</script>
+
+</body>
+</html>
